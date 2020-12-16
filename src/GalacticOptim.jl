@@ -14,7 +14,7 @@ import DiffEqBase: OptimizationProblem, OptimizationFunction, AbstractADType
 include("solve.jl")
 include("function.jl")
 
-export solve
+export solve, chained_solve
 
 export BBO, CMAEvolutionStrategyOpt
 

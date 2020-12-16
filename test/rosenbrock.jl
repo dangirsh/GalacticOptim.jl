@@ -14,6 +14,13 @@ prob = OptimizationProblem(f, x0, _p, lb=[-1.0, -1.0], ub=[0.8, 0.8])
 sol = solve(prob, SAMIN())
 @test 10*sol.minimum < l1
 
+sol = chained_solve([SimulatedAnnealing() => (),
+                     SAMIN() => (lb=[-1.0, -1.0], ub=[0.8, 0.8])],
+                    result -> result.minimum
+                    (;minimum=_p))
+@test 10*sol.minimum < l1
+
+
 using CMAEvolutionStrategy
 sol = solve(prob, CMAEvolutionStrategyOpt())
 @test 10*sol.minimum < l1

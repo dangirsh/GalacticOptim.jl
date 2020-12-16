@@ -11,6 +11,15 @@ function DiffEqBase.solve(prob::OptimizationProblem, opt, args...;kwargs...)
     __solve(prob, opt, args...; kwargs...)
 end
 
+
+function chained_solve(optimizer_chain, prob_from_result, init_result)
+    function reducer(result, (opt, solve_kwargs))
+        GalacticOptim.solve(prob_from_result(result), opt; solve_kwargs...)
+    end
+    foldl(reducer, optimizer_chain; init=init_result)
+end
+
+
 #=
 function update!(x::AbstractArray, x̄::AbstractArray{<:ForwardDiff.Dual})
   x .-= x̄
